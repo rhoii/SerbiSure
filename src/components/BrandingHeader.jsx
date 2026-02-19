@@ -1,9 +1,7 @@
-import { appName } from "../data/system";
-
-function BrandingHeader() {
+function BrandingHeader({ title }) {
   return (
     <header>
-      <h1 className="hero-brand">{appName}</h1>
+      <h1 className="hero-brand">{title}</h1>
     </header>
   );
 }

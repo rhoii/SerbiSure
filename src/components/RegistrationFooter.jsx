@@ -1,10 +1,8 @@
-import { systemInfo } from "../data/system";
-
-function RegistrationFooter() {
+function RegistrationFooter({ name, tagline, version }) {
     return (
         <footer>
             <p className="muted-footer" style={{ textAlign: "center" }}>
-                © 2026 {systemInfo.name} — {systemInfo.tagline} | v{systemInfo.version}
+                © 2026 {name} — {tagline} | v{version}
             </p>
         </footer>
     );
