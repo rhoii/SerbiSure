@@ -3,6 +3,11 @@ import { useState } from "react";
 function RegistrationForm({ title, subtitle, roles, skills }) {
     const [showPassword, setShowPassword] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [selectedRole, setSelectedRole] = useState(roles[0]);
+
+    function handleRoleChange(e) {
+        setSelectedRole(e.target.value);
+    }
 
     function handleTogglePassword() {
         setShowPassword(!showPassword);
@@ -65,28 +70,32 @@ function RegistrationForm({ title, subtitle, roles, skills }) {
 
                 <div className="form-row">
                     <label>User Type:</label>
-                    <select>
+                    <select value={selectedRole} onChange={handleRoleChange}>
                         {roles.map((role, index) => (
-                            <option key={index}>{role}</option>
+                            <option key={index} value={role}>{role}</option>
                         ))}
                     </select>
                 </div>
 
-                <div className="form-row">
-                    <label>Skill Category:</label>
-                    <select>
-                        {skills.map((skill, index) => (
-                            <option key={index} value={skill}>{skill}</option>
-                        ))}
-                    </select>
-                </div>
+                {selectedRole === "Service Worker" && (
+                    <>
+                        <div className="form-row">
+                            <label>Skill Category:</label>
+                            <select>
+                                {skills.map((skill, index) => (
+                                    <option key={index} value={skill}>{skill}</option>
+                                ))}
+                            </select>
+                        </div>
 
-                <div className="form-row">
-                    <label>Upload ID &amp; TESDA Certificate</label>
-                    <div className="file-input">
-                        <input type="file" />
-                    </div>
-                </div>
+                        <div className="form-row">
+                            <label>Upload ID &amp; TESDA Certificate</label>
+                            <div className="file-input">
+                                <input type="file" />
+                            </div>
+                        </div>
+                    </>
+                )}
 
                 <button type="submit" className="btn-primary">Register</button>
             </form>
