@@ -1,0 +1,284 @@
+/* ===========================
+   Dashboard Layout & Header
+   =========================== */
+
+.dashboard-page {
+    display: flex;
+    gap: 28px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+.dashboard-main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Welcome Section */
+.dashboard-welcome {
+    margin-bottom: 28px;
+}
+
+.dashboard-welcome-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.dashboard-welcome h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+}
+
+.dashboard-welcome p {
+    font-size: 14px;
+    color: #8b8ba3;
+    margin: 0;
+}
+
+/* System Online badge */
+.system-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(108, 92, 231, 0.1);
+    border: 1px solid rgba(108, 92, 231, 0.2);
+    font-size: 12px;
+    font-weight: 600;
+    color: #a29bfe;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #a29bfe;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* Tabs & Filter Bar */
+.dashboard-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.dashboard-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 4px;
+}
+
+.dashboard-tab {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #8b8ba3;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.dashboard-tab:hover {
+    color: #fff;
+}
+
+.dashboard-tab.active {
+    background: #6c5ce7;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
+}
+
+/* Filter controls */
+.dashboard-filter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6b6b8a;
+}
+
+.filter-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.filter-dropdown:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.filter-star {
+    color: #c0c0d8;
+    font-size: 14px;
+}
+
+.filter-chevron {
+    font-size: 10px;
+    color: #6b6b8a;
+    margin-left: 2px;
+}
+
+/* Active Requests Section */
+.active-requests-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.active-requests-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.request-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    font-weight: 600;
+    color: #8b8ba3;
+    padding: 0 8px;
+}
+
+/* Request cards list */
+.request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@media (max-width: 900px) {
+    .dashboard-page {
+        flex-direction: column;
+        padding: 0 16px;
+    }
+
+    .dashboard-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-page {
+        padding: 0 10px;
+        gap: 20px;
+    }
+
+    .dashboard-welcome {
+        margin-bottom: 18px;
+    }
+
+    .dashboard-welcome-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dashboard-welcome h1 {
+        font-size: 22px;
+    }
+
+    .dashboard-welcome p {
+        font-size: 13px;
+    }
+
+    .system-status-badge {
+        align-self: flex-start;
+        font-size: 11px;
+        padding: 5px 12px;
+    }
+
+    .dashboard-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .dashboard-tabs {
+        width: 100%;
+    }
+
+    .dashboard-tab {
+        flex: 1;
+        text-align: center;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .dashboard-filter {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-size: 10px;
+    }
+
+    .active-requests-header h2 {
+        font-size: 16px;
+    }
+
+    .request-count-badge {
+        min-width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
+
+    .request-list {
+        gap: 12px;
+    }
+}
