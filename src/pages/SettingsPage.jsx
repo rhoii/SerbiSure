@@ -1,27 +1,54 @@
 import { useState } from "react";
 
-function SettingsPage() {
-    const [darkMode, setDarkMode] = useState(true);
-    const [language, setLanguage] = useState("English");
-    const [email, setEmail] = useState("user@example.com");
-    const [password, setPassword] = useState("********");
+function SettingsPage({ settings, onUpdateSettings }) {
+    const [localEmail, setLocalEmail] = useState("user@example.com");
+    const [localPassword, setLocalPassword] = useState("********");
+    const [saveMessage, setSaveMessage] = useState("");
 
-    const handleEmailChange = (e) => setEmail(e.target.value);
-    const handlePasswordChange = (e) => setPassword(e.target.value);
+    const handleSave = () => {
+        setSaveMessage("Changes saved successfully!");
+        setTimeout(() => setSaveMessage(""), 3000);
+        onUpdateSettings({ ...settings }); // Trigger notification in App.jsx
+    };
 
     return (
-        <div className="page-wrapper" style={{ maxWidth: "700px", width: "100%" }}>
-            <div className="glass-card" style={{ padding: "40px" }}>
+        <div className="page-wrapper">
+            <div className="glass-card" style={{ padding: "40px", maxWidth: "700px", width: "100%" }}>
                 <h2 className="form-title">Settings</h2>
                 <p className="form-subtitle">Update your account and app preferences</p>
 
-                <div style={{ marginTop: "30px", display: "flex", flexDirection: "column", gap: "25px" }}>
+                {saveMessage && (
+                    <div style={{
+                        padding: "12px",
+                        background: "rgba(74, 222, 128, 0.15)",
+                        color: "#4ade80",
+                        borderRadius: "8px",
+                        marginBottom: "20px",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        border: "1px solid rgba(74, 222, 128, 0.3)"
+                    }}>
+                        {saveMessage}
+                    </div>
+                )}
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
 
                     {/* Profile Picture Section */}
                     <div style={{ padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "12px" }}>
-                        <h3 style={{ fontSize: "16px", marginBottom: "15px", color: "#fff" }}>Profile Picture</h3>
+                        <h3 style={{ fontSize: "16px", marginBottom: "15px", color: "var(--text)" }}>Profile Picture</h3>
                         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                            <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "var(--accent)", display: "flex", alignItems: "center", justifyCenter: "center", fontSize: "30px" }}>
+                            <div style={{
+                                width: "80px",
+                                height: "80px",
+                                borderRadius: "50%",
+                                background: "var(--accent)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontSize: "30px",
+                                color: "#fff"
+                            }}>
                                 👤
                             </div>
                             <button className="btn-primary" style={{ width: "auto", padding: "10px 20px" }}>
@@ -32,48 +59,69 @@ function SettingsPage() {
 
                     {/* Account Section */}
                     <div style={{ padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "12px" }}>
-                        <h3 style={{ fontSize: "16px", marginBottom: "15px", color: "#fff" }}>Account Information</h3>
+                        <h3 style={{ fontSize: "16px", marginBottom: "15px", color: "var(--text)" }}>Account Information</h3>
                         <div className="form-row" style={{ marginBottom: "15px" }}>
                             <label>Email Address</label>
-                            <input type="email" value={email} onChange={handleEmailChange} />
+                            <input type="email" value={localEmail} onChange={(e) => setLocalEmail(e.target.value)} />
                         </div>
                         <div className="form-row">
                             <label>New Password</label>
-                            <input type="password" value={password} onChange={handlePasswordChange} placeholder="Enter new password" />
+                            <input type="password" value={localPassword} onChange={(e) => setLocalPassword(e.target.value)} placeholder="Enter new password" />
                         </div>
                     </div>
 
                     {/* App Preferences */}
                     <div style={{ padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "12px" }}>
-                        <h3 style={{ fontSize: "16px", marginBottom: "15px", color: "#fff" }}>App Preferences</h3>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                        <h3 style={{ fontSize: "16px", marginBottom: "15px", color: "var(--text)" }}>App Preferences</h3>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid var(--card-border)" }}>
                             <span>Appearance</span>
                             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                                <span style={{ fontSize: "12px", color: darkMode ? "var(--accent)" : "var(--muted)" }}>{darkMode ? "Dark" : "Light"}</span>
-                                <input
-                                    type="checkbox"
-                                    checked={darkMode}
-                                    onChange={() => setDarkMode(!darkMode)}
-                                    style={{ width: "40px", height: "20px", cursor: "pointer" }}
-                                />
+                                <span style={{ fontSize: "12px", color: settings?.darkMode ? "var(--accent)" : "var(--muted)" }}>
+                                    {settings?.darkMode ? "Dark Mode" : "Light Mode"}
+                                </span>
+                                <div
+                                    onClick={() => onUpdateSettings({ ...settings, darkMode: !settings.darkMode })}
+                                    style={{
+                                        width: "50px",
+                                        height: "26px",
+                                        background: settings?.darkMode ? "var(--accent)" : "rgba(0,0,0,0.1)",
+                                        borderRadius: "13px",
+                                        position: "relative",
+                                        cursor: "pointer",
+                                        transition: "all 0.3s ease",
+                                        border: "1px solid var(--card-border)"
+                                    }}
+                                >
+                                    <div style={{
+                                        width: "20px",
+                                        height: "20px",
+                                        background: "#fff",
+                                        borderRadius: "50%",
+                                        position: "absolute",
+                                        top: "2px",
+                                        left: settings?.darkMode ? "26px" : "2px",
+                                        transition: "all 0.3s ease",
+                                        boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
+                                    }} />
+                                </div>
                             </div>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}>
                             <span>Language</span>
                             <select
-                                value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
+                                value={settings?.language}
+                                onChange={(e) => onUpdateSettings({ ...settings, language: e.target.value })}
                                 style={{ width: "150px" }}
                             >
                                 <option value="English">English</option>
-                                <option value="Tagalog">Tagalog (Limited)</option>
+                                <option value="Tagalog">Tagalog</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div style={{ marginTop: "30px" }}>
-                    <button className="btn-primary" onClick={() => alert("Settings saved (locally)")}>
+                    <button className="btn-primary" onClick={handleSave}>
                         Save All Changes
                     </button>
                 </div>

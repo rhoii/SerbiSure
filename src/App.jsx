@@ -16,8 +16,12 @@ import SettingsPage from "./pages/SettingsPage";
 function AppContent() {
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState({ name: "", email: "", role: "" });
+    const [user, setUser] = useState({ name: "", email: "", role: "", about: "", skills: "", location: "" });
     const [notifications, setNotifications] = useState([]);
+    const [settings, setSettings] = useState({
+        darkMode: true,
+        language: "English"
+    });
 
     // Mock initial workers
     const [workers, setWorkers] = useState([
@@ -67,25 +71,15 @@ function AppContent() {
         addNotification("Profile updated successfully!");
     };
 
+    const handleUpdateSettings = (newSettings) => {
+        setSettings(newSettings);
+        addNotification("Settings updated!");
+    };
+
     return (
-        <div className="app-container" style={{
-            flexDirection: "column",
-            height: "100vh",
-            display: "flex",
-            padding: 0
-        }}>
+        <div className={`app-container ${!settings.darkMode ? "light-theme" : ""}`}>
             {isAuthenticated && <Navbar user={user} notifications={notifications} onLogout={handleLogout} />}
-            <div className="page-content" style={{
-                flex: "1",
-                width: "100%",
-                overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "20px",
-                background: "#08080f",
-                position: "relative"
-            }}>
+            <div className="page-content">
                 {isAuthenticated && (
                     <div style={{
                         width: "100%",
@@ -100,6 +94,7 @@ function AppContent() {
                         Hi {user.name}!
                     </div>
                 )}
+                <div style={{ height: "10px" }}></div>
                 <Routes>
                     <Route path="/login" element={
                         !isAuthenticated ?
@@ -146,7 +141,7 @@ function AppContent() {
 
                     <Route path="/settings" element={
                         isAuthenticated ?
-                            <SettingsPage /> :
+                            <SettingsPage settings={settings} onUpdateSettings={handleUpdateSettings} /> :
                             <Navigate to="/login" />
                     } />
 

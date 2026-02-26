@@ -18,7 +18,7 @@ function MainFeed({ workers, addNotification }) {
                 <h2 className="form-title">Service Provider Feed</h2>
                 <p className="form-subtitle">Discover and connect with skilled professionals near you</p>
 
-                <div style={{ marginTop: "20px", position: "relative" }}>
+                <div style={{ marginTop: "30px", marginBottom: "20px", position: "relative" }}>
                     <input
                         type="text"
                         placeholder="Search skills (e.g. Plumbing, Electrical)..."
@@ -32,17 +32,14 @@ function MainFeed({ workers, addNotification }) {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "25px", width: "100%" }}>
                 {filteredWorkers.map(worker => (
                     <div key={worker.id} className="glass-card" style={{ padding: "0", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                        {/* Card Header/Cover */}
-                        <div style={{ height: "100px", background: "linear-gradient(135deg, var(--accent), var(--accent-dark))", opacity: 0.8 }} />
-
-                        <div style={{ padding: "20px", marginTop: "-50px" }}>
-                            <div style={{ display: "flex", alignItems: "flex-end", gap: "15px", marginBottom: "15px" }}>
+                        <div style={{ padding: "24px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "20px" }}>
                                 <div style={{
                                     width: "80px",
                                     height: "80px",
                                     borderRadius: "15px",
-                                    background: "#1a1a2e",
-                                    border: "3px solid #08080f",
+                                    background: "var(--bg-2)",
+                                    border: "1px solid var(--card-border)",
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
