@@ -2,7 +2,7 @@ import { BrandingHeader, RegistrationForm, RegistrationFooter } from "../compone
 import { appName, systemInfo, userRoles } from "../data/system";
 import { skillCategories } from "../data/skills";
 
-function Registration() {
+function Registration({ onNavigateToLogin, onRegister }) {
   return (
     <main className="page-wrapper">
       <BrandingHeader title={appName} />
@@ -11,6 +11,7 @@ function Registration() {
         subtitle={`Join ${systemInfo.totalWorkers}+ verified workers in ${systemInfo.region}`}
         roles={userRoles}
         skills={skillCategories}
+        onRegister={onRegister}
       />
       <RegistrationFooter
         name={systemInfo.name}

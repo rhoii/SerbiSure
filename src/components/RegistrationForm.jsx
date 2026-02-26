@@ -1,20 +1,24 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-function RegistrationForm({ title, subtitle, roles, skills }) {
+function RegistrationForm({ title, subtitle, roles, skills, onRegister }) {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        role: roles[0]
+    });
     const [showPassword, setShowPassword] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [selectedRole, setSelectedRole] = useState(roles[0]);
 
-    function handleRoleChange(e) {
-        setSelectedRole(e.target.value);
-    }
-
-    function handleTogglePassword() {
-        setShowPassword(!showPassword);
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
     }
 
     function handleSubmit(e) {
         e.preventDefault();
+        onRegister(formData.email, formData.role, formData.name);
         setSubmitted(true);
     }
 
@@ -25,7 +29,7 @@ function RegistrationForm({ title, subtitle, roles, skills }) {
                     <span className="success-icon">✓</span>
                     <h2 className="form-title">Registration Successful!</h2>
                     <p className="form-subtitle">
-                        Your account has been created. You will be verified shortly.
+                        Welcome, {formData.name}! Your account has been created.
                     </p>
                     <button
                         type="button"
@@ -46,8 +50,27 @@ function RegistrationForm({ title, subtitle, roles, skills }) {
                 <p className="form-subtitle">{subtitle}</p>
 
                 <div className="form-row">
+                    <label>Full Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Full Name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="form-row">
                     <label>Email</label>
-                    <input type="email" placeholder="Email" required />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
                 </div>
 
                 <div className="form-row">
@@ -55,13 +78,16 @@ function RegistrationForm({ title, subtitle, roles, skills }) {
                     <div className="password-wrapper">
                         <input
                             type={showPassword ? "text" : "password"}
+                            name="password"
                             placeholder="Password"
                             required
+                            value={formData.password}
+                            onChange={handleChange}
                         />
                         <button
                             type="button"
                             className="btn-toggle-password"
-                            onClick={handleTogglePassword}
+                            onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? "Hide" : "Show"}
                         </button>
@@ -70,18 +96,18 @@ function RegistrationForm({ title, subtitle, roles, skills }) {
 
                 <div className="form-row">
                     <label>User Type:</label>
-                    <select value={selectedRole} onChange={handleRoleChange}>
+                    <select name="role" value={formData.role} onChange={handleChange}>
                         {roles.map((role, index) => (
                             <option key={index} value={role}>{role}</option>
                         ))}
                     </select>
                 </div>
 
-                {selectedRole === "Service Worker" && (
+                {formData.role === "Service Worker" && (
                     <>
                         <div className="form-row">
                             <label>Skill Category:</label>
-                            <select>
+                            <select name="skill" onChange={handleChange}>
                                 {skills.map((skill, index) => (
                                     <option key={index} value={skill}>{skill}</option>
                                 ))}
@@ -98,6 +124,16 @@ function RegistrationForm({ title, subtitle, roles, skills }) {
                 )}
 
                 <button type="submit" className="btn-primary">Register</button>
+
+                <p className="muted-footer" style={{ marginTop: "10px", color: "var(--text)", fontSize: "14px" }}>
+                    Already have an account?{" "}
+                    <Link
+                        to="/login"
+                        style={{ color: "var(--accent)", cursor: "pointer", fontWeight: "600", textDecoration: "none" }}
+                    >
+                        Log in here
+                    </Link>
+                </p>
             </form>
         </section>
     );
