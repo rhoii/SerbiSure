@@ -90,7 +90,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 20px;
+  padding: 30px 20px;
   box-sizing: border-box;
 }
 
@@ -349,112 +349,6 @@ select option {
   form {
     padding: 24px 20px;
     border-radius: 16px;
-  }
-}
-
-/* Top Navigation Header */
-.navbar {
-  width: 100%;
-  height: 70px;
-  background: var(--bg-1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--card-border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 40px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand {
-  font-size: 22px;
-  font-weight: 800;
-  color: #fff;
-  text-decoration: none;
-  background: linear-gradient(135deg, #fff, var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.navbar-links {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-.nav-link-item {
-  text-decoration: none;
-  color: #a0a0c0;
-  font-weight: 500;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-
-.nav-link-item:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.nav-link-item.active {
-  color: #fff;
-  background: var(--accent);
-}
-
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.notification-badge {
-  background: #ff4d4d;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 10px;
-  color: #fff;
-  position: absolute;
-  top: -5px;
-  right: -5px;
-}
-
-.btn-icon {
-  background: none;
-  border: none;
-  color: #a0a0c0;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.btn-icon:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0 20px;
-  }
-
-  .navbar-links {
-    gap: 10px;
-  }
-
-  .nav-link-item {
-    font-size: 13px;
-    padding: 6px 8px;
   }
 }
 

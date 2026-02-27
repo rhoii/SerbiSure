@@ -1,0 +1,344 @@
+/* ===========================
+   Sidebar Styles
+   =========================== */
+
+.dashboard-sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* CTA Card (Book Now) */
+.sidebar-cta {
+    background: linear-gradient(135deg, #6c5ce7, #4834d4);
+    border-radius: 16px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-cta::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.sidebar-cta::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-cta h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar-cta p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-book-now {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    position: relative;
+    z-index: 1;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.btn-book-now:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Sidebar panels (Top Rated + Notifications) */
+.sidebar-panel {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.sidebar-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.sidebar-panel-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.sidebar-panel-header .view-all {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6c5ce7;
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    transition: color 0.2s ease;
+}
+
+.sidebar-panel-header .view-all:hover {
+    color: #a29bfe;
+}
+
+/* Top Rated Worker Item */
+.top-rated-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.top-rated-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-rated-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.top-rated-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.top-rated-avatar .verified-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    background: #6c5ce7;
+    border-radius: 50%;
+    border: 2px solid #12121e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    color: #fff;
+}
+
+.top-rated-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-rated-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 2px 0;
+}
+
+.top-rated-specialty {
+    font-size: 11px;
+    color: #6b6b8a;
+}
+
+.top-rated-score {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.top-rated-rating {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.top-rated-rating .star {
+    font-size: 12px;
+}
+
+.top-rated-reliability {
+    font-size: 10px;
+    color: #6b6b8a;
+    margin-top: 2px;
+}
+
+.top-rated-below-threshold {
+    color: #6b6b8a;
+}
+
+/* Notification Items */
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.notification-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.notification-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.notification-dot.unread {
+    background: #6c5ce7;
+}
+
+.notification-dot.read {
+    background: #3a3a5a;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-content h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 3px 0;
+}
+
+.notification-content p {
+    font-size: 12px;
+    color: #6b6b8a;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+}
+
+.notification-time {
+    font-size: 10px;
+    color: #4a4a6a;
+    font-style: italic;
+}
+
+@media (max-width: 900px) {
+    .dashboard-sidebar {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-sidebar {
+        gap: 14px;
+    }
+
+    .sidebar-cta {
+        padding: 22px 18px;
+        border-radius: 14px;
+    }
+
+    .sidebar-cta h3 {
+        font-size: 16px;
+    }
+
+    .sidebar-cta p {
+        font-size: 12px;
+    }
+
+    .btn-book-now {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .sidebar-panel {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .sidebar-panel-header {
+        margin-bottom: 14px;
+    }
+
+    .sidebar-panel-header h3 {
+        font-size: 14px;
+    }
+
+    .top-rated-list {
+        gap: 12px;
+    }
+
+    .top-rated-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .top-rated-name {
+        font-size: 12px;
+    }
+
+    .top-rated-specialty {
+        font-size: 10px;
+    }
+
+    .top-rated-rating {
+        font-size: 14px;
+    }
+
+    .top-rated-reliability {
+        font-size: 9px;
+    }
+
+    .notification-list {
+        gap: 12px;
+    }
+
+    .notification-content h4 {
+        font-size: 12px;
+    }
+
+    .notification-content p {
+        font-size: 11px;
+    }
+}

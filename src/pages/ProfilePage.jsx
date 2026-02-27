@@ -9,6 +9,7 @@ function ProfilePage({ user, onUpdateProfile }) {
         location: user.location || "Manila, Philippines"
     });
     const [isEditing, setIsEditing] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,47 +27,72 @@ function ProfilePage({ user, onUpdateProfile }) {
             location: formData.location
         });
         setIsEditing(false);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
     };
 
     return (
-        <div className="page-wrapper" style={{ maxWidth: "800px", width: "100%" }}>
-            <div className="glass-card" style={{ padding: "40px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
+        <div className="page-wrapper" style={{ width: "100%", maxWidth: "800px" }}>
+            {showSuccess && (
+                <div style={{
+                    background: "rgba(108, 92, 231, 0.12)",
+                    color: "#a29bfe",
+                    padding: "14px 20px",
+                    borderRadius: "12px",
+                    marginBottom: "20px",
+                    border: "1px solid rgba(108, 92, 231, 0.25)",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    width: "100%",
+                    textAlign: "center"
+                }}>
+                    ✓ Profile updated successfully!
+                </div>
+            )}
+
+            <div style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderRadius: "16px",
+                padding: "32px",
+                width: "100%"
+            }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px" }}>
                     <div>
-                        <h2 className="form-title" style={{ margin: 0 }}>My Profile</h2>
-                        <p className="form-subtitle">Personal information for the SerbiSure community</p>
+                        <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#fff", margin: "0 0 4px 0" }}>My Profile</h2>
+                        <p style={{ fontSize: "13px", color: "#8b8ba3", margin: 0 }}>Personal information for the SerbiSure community</p>
                     </div>
                     {!isEditing && (
-                        <button onClick={() => setIsEditing(true)} className="btn-primary" style={{ width: "auto", padding: "10px 20px" }}>
+                        <button onClick={() => setIsEditing(true)} className="btn-primary" style={{ width: "auto", padding: "10px 20px", margin: 0 }}>
                             Edit Profile
                         </button>
                     )}
                 </div>
 
-                <div style={{ display: "flex", gap: "40px", flexDirection: window.innerWidth < 768 ? "column" : "row" }}>
-                    {/* Left Column: Avatar & Role */}
-                    <div style={{ flex: "0 0 200px", textAlign: "center" }}>
+                <div style={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
+                    {/* Left: Avatar & Role */}
+                    <div style={{ flex: "0 0 160px", textAlign: "center" }}>
                         <div style={{
-                            width: "150px",
-                            height: "150px",
+                            width: "120px",
+                            height: "120px",
                             borderRadius: "50%",
-                            background: "linear-gradient(135deg, var(--accent), var(--accent-dark))",
-                            margin: "0 auto 20px",
+                            background: "linear-gradient(135deg, #6c5ce7, #4834d4)",
+                            margin: "0 auto 16px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            fontSize: "60px",
-                            boxShadow: "0 10px 30px rgba(99, 140, 255, 0.3)"
+                            fontSize: "48px",
+                            boxShadow: "0 8px 24px rgba(108, 92, 231, 0.3)"
                         }}>
                             👤
                         </div>
                         <span style={{
-                            padding: "6px 15px",
-                            borderRadius: "20px",
-                            background: "rgba(99, 140, 255, 0.15)",
-                            color: "var(--accent)",
-                            fontSize: "12px",
-                            fontWeight: "700",
+                            padding: "5px 14px",
+                            borderRadius: "16px",
+                            background: "rgba(108, 92, 231, 0.12)",
+                            color: "#a29bfe",
+                            fontSize: "11px",
+                            fontWeight: "600",
                             textTransform: "uppercase",
                             letterSpacing: "1px"
                         }}>
@@ -74,10 +100,13 @@ function ProfilePage({ user, onUpdateProfile }) {
                         </span>
                     </div>
 
-                    {/* Right Column: Details */}
-                    <div style={{ flex: 1 }}>
+                    {/* Right: Details */}
+                    <div style={{ flex: 1, minWidth: "240px" }}>
                         {isEditing ? (
-                            <form onSubmit={handleSubmit} style={{ padding: 0, background: "none", border: "none", backdropFilter: "none", boxShadow: "none", gap: "15px" }}>
+                            <form onSubmit={handleSubmit} style={{
+                                padding: 0, background: "none", border: "none",
+                                boxShadow: "none", backdropFilter: "none", gap: "14px"
+                            }}>
                                 <div className="form-row">
                                     <label>Full Name</label>
                                     <input type="text" name="name" value={formData.name} onChange={handleChange} required />
@@ -92,45 +121,52 @@ function ProfilePage({ user, onUpdateProfile }) {
                                 </div>
                                 <div className="form-row">
                                     <label>About Me</label>
-                                    <textarea name="about" value={formData.about} onChange={handleChange} rows="4" style={{ borderRadius: "10px", padding: "12px", background: "var(--input-bg)", color: "#fff", border: "1px solid var(--input-border)" }} />
+                                    <textarea name="about" value={formData.about} onChange={handleChange} rows="3"
+                                        style={{ borderRadius: "10px", padding: "12px", background: "var(--input-bg)", color: "#fff", border: "1px solid var(--input-border)", fontFamily: "inherit", fontSize: "14px" }} />
                                 </div>
                                 {user.role === "worker" && (
                                     <div className="form-row">
-                                        <label>Skills / Services Offered</label>
+                                        <label>Skills / Services</label>
                                         <input type="text" name="skills" value={formData.skills} onChange={handleChange} placeholder="e.g. Plumbing, Electrical" />
                                     </div>
                                 )}
-                                <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-                                    <button type="submit" className="btn-primary" style={{ flex: 1 }}>Save Changes</button>
-                                    <button type="button" onClick={() => setIsEditing(false)} className="btn-primary" style={{ flex: 1, background: "rgba(255,255,255,0.05)", color: "#fff" }}>Cancel</button>
+                                <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
+                                    <button type="submit" className="btn-primary" style={{ flex: 2 }}>Save Changes</button>
+                                    <button type="button" onClick={() => setIsEditing(false)} style={{
+                                        flex: 1, padding: "12px", borderRadius: "12px",
+                                        border: "1px solid rgba(255,255,255,0.1)", background: "transparent",
+                                        color: "#fff", fontSize: "14px", fontWeight: "500", cursor: "pointer", fontFamily: "inherit"
+                                    }}>Cancel</button>
                                 </div>
                             </form>
                         ) : (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "25px" }}>
-                                <div className="profile-section">
-                                    <label style={{ display: "block", marginBottom: "5px" }}>Full Name</label>
-                                    <p style={{ fontSize: "20px", fontWeight: "600", color: "#fff", margin: 0 }}>{user.name}</p>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                                <div>
+                                    <label style={{ display: "block", marginBottom: "4px" }}>Full Name</label>
+                                    <p style={{ fontSize: "18px", fontWeight: "600", color: "#fff", margin: 0 }}>{user.name}</p>
                                 </div>
-                                <div className="profile-section">
-                                    <label style={{ display: "block", marginBottom: "5px" }}>Email Address</label>
-                                    <p style={{ fontSize: "16px", color: "#a0a0c0", margin: 0 }}>{user.email}</p>
+                                <div>
+                                    <label style={{ display: "block", marginBottom: "4px" }}>Email Address</label>
+                                    <p style={{ fontSize: "15px", color: "#a0a0c0", margin: 0 }}>{user.email}</p>
                                 </div>
-                                <div className="profile-section">
-                                    <label style={{ display: "block", marginBottom: "5px" }}>Location</label>
-                                    <p style={{ fontSize: "16px", color: "#a0a0c0", margin: 0 }}>{formData.location}</p>
+                                <div>
+                                    <label style={{ display: "block", marginBottom: "4px" }}>Location</label>
+                                    <p style={{ fontSize: "15px", color: "#a0a0c0", margin: 0 }}>{formData.location}</p>
                                 </div>
-                                <div className="profile-section">
-                                    <label style={{ display: "block", marginBottom: "5px" }}>About Me</label>
-                                    <p style={{ fontSize: "15px", lineHeight: "1.6", color: "#d0d0e0", margin: 0 }}>{formData.about}</p>
+                                <div>
+                                    <label style={{ display: "block", marginBottom: "4px" }}>About Me</label>
+                                    <p style={{ fontSize: "14px", lineHeight: "1.6", color: "#c0c0d8", margin: 0 }}>{formData.about}</p>
                                 </div>
                                 {user.role === "worker" && (
-                                    <div className="profile-section">
-                                        <label style={{ display: "block", marginBottom: "5px" }}>Skills & Services</label>
-                                        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "5px" }}>
+                                    <div>
+                                        <label style={{ display: "block", marginBottom: "4px" }}>Skills & Services</label>
+                                        <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "4px" }}>
                                             {formData.skills.split(",").map((skill, i) => (
-                                                <span key={i} style={{ padding: "5px 12px", background: "rgba(255,255,255,0.05)", borderRadius: "15px", fontSize: "13px", color: "#fff" }}>
-                                                    {skill.trim()}
-                                                </span>
+                                                <span key={i} style={{
+                                                    padding: "4px 12px", background: "rgba(108, 92, 231, 0.1)",
+                                                    border: "1px solid rgba(108, 92, 231, 0.2)", borderRadius: "12px",
+                                                    fontSize: "12px", color: "#a29bfe"
+                                                }}>{skill.trim()}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -145,4 +181,3 @@ function ProfilePage({ user, onUpdateProfile }) {
 }
 
 export default ProfilePage;
-

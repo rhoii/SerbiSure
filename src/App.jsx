@@ -3,13 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "r
 import "./styles/App.css";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
-import MainFeed from "./pages/MainFeed";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import FeedbackPage from "./pages/FeedbackPage";
-import AdminPage from "./pages/AdminPage";
+import HomeownerDashboardPage from "./pages/HomeownerDashboardPage";
+import ServicesPage from "./pages/FeedbackPage";
 
+import HistoryPage from "./pages/HistoryPage";
 import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 
@@ -42,15 +40,11 @@ function AppContent() {
     const handleLogin = (email, password) => {
         let role = "homeowner";
         let name = email.split('@')[0];
-        if (email === "admin@serbisure.com") {
-            role = "admin";
-            name = "System Admin";
-        }
 
         setIsAuthenticated(true);
         setUser({ name, email, role });
         addNotification(`Welcome back, ${name}!`);
-        navigate(role === "admin" ? "/admin" : "/dashboard");
+        navigate("/dashboard");
     };
 
     const handleRegister = (email, role, name) => {
@@ -80,26 +74,11 @@ function AppContent() {
         <div className={`app-container ${!settings.darkMode ? "light-theme" : ""}`}>
             {isAuthenticated && <Navbar user={user} notifications={notifications} onLogout={handleLogout} />}
             <div className="page-content">
-                {isAuthenticated && (
-                    <div style={{
-                        width: "100%",
-                        maxWidth: "1200px",
-                        padding: "0 20px",
-                        marginTop: "20px",
-                        marginBottom: "10px",
-                        fontSize: "24px",
-                        fontWeight: "700",
-                        color: "#fff",
-                    }}>
-                        Hi {user.name}!
-                    </div>
-                )}
-                <div style={{ height: "10px" }}></div>
                 <Routes>
                     <Route path="/login" element={
                         !isAuthenticated ?
                             <Login onLogin={handleLogin} /> :
-                            <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} />
+                            <Navigate to="/dashboard" />
                     } />
                     <Route path="/register" element={
                         !isAuthenticated ?
@@ -110,26 +89,13 @@ function AppContent() {
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={
                         isAuthenticated ?
-                            (user.role === "admin" ? <Navigate to="/admin" /> :
-                                <MainFeed workers={workers} addNotification={addNotification} />) :
-                            <Navigate to="/login" />
-                    } />
-
-                    <Route path="/admin" element={
-                        isAuthenticated && user.role === "admin" ?
-                            <AdminPage workers={workers} setWorkers={setWorkers} addNotification={addNotification} /> :
-                            <Navigate to="/login" />
-                    } />
-
-                    <Route path="/admin/analytics" element={
-                        isAuthenticated && user.role === "admin" ?
-                            <AnalyticsPage workers={workers} bookings={bookings} /> :
+                            <HomeownerDashboardPage user={user} /> :
                             <Navigate to="/login" />
                     } />
 
                     <Route path="/feedback" element={
                         isAuthenticated && user.role === "homeowner" ?
-                            <FeedbackPage workers={workers} setWorkers={setWorkers} addNotification={addNotification} /> :
+                            <ServicesPage workers={workers} addNotification={addNotification} /> :
                             <Navigate to="/login" />
                     } />
 
@@ -139,13 +105,19 @@ function AppContent() {
                             <Navigate to="/login" />
                     } />
 
+                    <Route path="/history" element={
+                        isAuthenticated ?
+                            <HistoryPage user={user} /> :
+                            <Navigate to="/login" />
+                    } />
+
                     <Route path="/settings" element={
                         isAuthenticated ?
                             <SettingsPage settings={settings} onUpdateSettings={handleUpdateSettings} /> :
                             <Navigate to="/login" />
                     } />
 
-                    <Route path="/" element={<Navigate to={isAuthenticated ? (user.role === "admin" ? "/admin" : "/dashboard") : "/login"} />} />
+                    <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
                 </Routes>
             </div>
         </div>
