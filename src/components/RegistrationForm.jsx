@@ -10,16 +10,33 @@ function RegistrationForm({ title, subtitle, roles, skills, onRegister }) {
     });
     const [showPassword, setShowPassword] = useState(false);
     const [submitted, setSubmitted] = useState(false);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        setError("");
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        onRegister(formData.email, formData.role, formData.name);
-        setSubmitted(true);
+        setLoading(true);
+        setError("");
+
+        const result = await onRegister(formData.email, formData.role, formData.name, formData.password);
+
+        if (result.success) {
+            setSubmitted(true);
+        } else {
+            const errorMessages = {
+                "auth/email-already-in-use": "This email is already registered.",
+                "auth/weak-password": "Password must be at least 6 characters.",
+                "auth/invalid-email": "Please enter a valid email address.",
+            };
+            setError(errorMessages[result.error] || "Registration failed. Please try again.");
+        }
+        setLoading(false);
     }
 
     if (submitted) {
@@ -48,6 +65,20 @@ function RegistrationForm({ title, subtitle, roles, skills, onRegister }) {
             <form onSubmit={handleSubmit}>
                 <h2 className="form-title">{title}</h2>
                 <p className="form-subtitle">{subtitle}</p>
+
+                {error && (
+                    <div style={{
+                        padding: "10px 14px",
+                        borderRadius: "8px",
+                        background: "rgba(252, 92, 101, 0.12)",
+                        border: "1px solid rgba(252, 92, 101, 0.25)",
+                        color: "#fc5c65",
+                        fontSize: "13px",
+                        fontWeight: 500
+                    }}>
+                        {error}
+                    </div>
+                )}
 
                 <div className="form-row">
                     <label>Full Name</label>
@@ -123,7 +154,9 @@ function RegistrationForm({ title, subtitle, roles, skills, onRegister }) {
                     </>
                 )}
 
-                <button type="submit" className="btn-primary">Register</button>
+                <button type="submit" className="btn-primary" disabled={loading}>
+                    {loading ? "Registering..." : "Register"}
+                </button>
 
                 <p className="muted-footer" style={{ marginTop: "10px", color: "var(--text)", fontSize: "14px" }}>
                     Already have an account?{" "}

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { registerUser, loginUser, logoutUser, onAuthChange } from "./firebase/auth";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import "./styles/App.css";
 import Registration from "./pages/Registration";
@@ -17,6 +18,7 @@ function AppContent() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState({ name: "", email: "", role: "", about: "", skills: "", location: "" });
     const [notifications, setNotifications] = useState([]);
+    const [authLoading, setAuthLoading] = useState(true);
     const [settings, setSettings] = useState({
         darkMode: true,
         language: "English"
@@ -34,31 +36,65 @@ function AppContent() {
         { id: 1, workerName: "Juana Dela Cruz", serviceType: "Plumbing", status: "pending" },
     ]);
 
+    // Firebase Auth state observer — listens for session changes over HTTPS/TLS
+    useEffect(() => {
+        const unsubscribe = onAuthChange((firebaseUser) => {
+            if (firebaseUser) {
+                // User is signed in — Firebase provides a verified JWT token
+                setIsAuthenticated(true);
+                setUser(prev => ({
+                    ...prev,
+                    name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+                    email: firebaseUser.email,
+                    role: prev.role || "homeowner"
+                }));
+            } else {
+                // User is signed out
+                setIsAuthenticated(false);
+                setUser({ name: "", email: "", role: "", about: "", skills: "", location: "" });
+            }
+            setAuthLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
+
     const addNotification = (message) => {
         setNotifications((prev) => [...prev, { id: Date.now(), message }]);
     };
 
-    const handleLogin = (email, password) => {
-        let role = "homeowner";
-        let name = email.split('@')[0];
-
-        setIsAuthenticated(true);
-        setUser({ name, email, role });
-        addNotification(`Welcome back, ${name}!`);
-        navigate("/dashboard");
+    // Firebase Auth: Email/Password sign-in (encrypted via HTTPS/TLS)
+    const handleLogin = async (email, password) => {
+        try {
+            await loginUser(email, password);
+            addNotification(`Welcome back!`);
+            navigate("/dashboard");
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: error.code };
+        }
     };
 
-    const handleRegister = (email, role, name) => {
-        setIsAuthenticated(true);
-        setUser({ name, email, role: role === "Service Worker" ? "worker" : "homeowner" });
-        addNotification(`Welcome to SerbiSure, ${name}!`);
-        navigate("/dashboard");
+    // Firebase Auth: Create account with email/password (encrypted via HTTPS/TLS)
+    const handleRegister = async (email, role, name, password) => {
+        try {
+            await registerUser(email, password, name);
+            setUser(prev => ({ ...prev, role: role === "Service Worker" ? "worker" : "homeowner" }));
+            addNotification(`Welcome to SerbiSure, ${name}!`);
+            navigate("/dashboard");
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: error.code };
+        }
     };
 
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        setUser({ name: "", email: "", role: "" });
-        navigate("/login");
+    // Firebase Auth: Sign out (invalidates session token)
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            navigate("/login");
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
     };
 
     const handleUpdateProfile = (updatedUser) => {

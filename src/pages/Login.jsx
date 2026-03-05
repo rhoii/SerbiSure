@@ -9,15 +9,34 @@ function Login({ onLogin }) {
         password: ""
     });
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        setError(""); // Clear error on input change
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onLogin(formData.email, formData.password);
+        setLoading(true);
+        setError("");
+
+        const result = await onLogin(formData.email, formData.password);
+
+        if (!result.success) {
+            // Map Firebase Auth error codes to user-friendly messages
+            const errorMessages = {
+                "auth/invalid-credential": "Invalid email or password.",
+                "auth/user-not-found": "No account found with this email.",
+                "auth/wrong-password": "Incorrect password.",
+                "auth/too-many-requests": "Too many failed attempts. Please try again later.",
+                "auth/invalid-email": "Please enter a valid email address.",
+            };
+            setError(errorMessages[result.error] || "Login failed. Please try again.");
+        }
+        setLoading(false);
     };
 
     return (
@@ -27,6 +46,20 @@ function Login({ onLogin }) {
                 <form onSubmit={handleSubmit}>
                     <h2 className="form-title">Login</h2>
                     <p className="form-subtitle">Access your SerbiSure account</p>
+
+                    {error && (
+                        <div style={{
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            background: "rgba(252, 92, 101, 0.12)",
+                            border: "1px solid rgba(252, 92, 101, 0.25)",
+                            color: "#fc5c65",
+                            fontSize: "13px",
+                            fontWeight: 500
+                        }}>
+                            {error}
+                        </div>
+                    )}
 
                     <div className="form-row">
                         <label>Email</label>
@@ -61,7 +94,9 @@ function Login({ onLogin }) {
                         </div>
                     </div>
 
-                    <button type="submit" className="btn-primary">Log In</button>
+                    <button type="submit" className="btn-primary" disabled={loading}>
+                        {loading ? "Signing in..." : "Log In"}
+                    </button>
 
                     <p className="muted-footer" style={{ marginTop: "10px", color: "var(--text)", fontSize: "14px" }}>
                         Don't have an account?{" "}
