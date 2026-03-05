@@ -1,3 +1,3 @@
-export { default as BrandingHeader } from "./BrandingHeader";
-export { default as RegistrationForm } from "./RegistrationForm";
-export { default as RegistrationFooter } from "./RegistrationFooter";
+export { default as BrandingHeader } from "./BrandingHeader/BrandingHeader";
+export { default as RegistrationForm } from "./RegistrationForm/RegistrationForm";
+export { default as RegistrationFooter } from "./RegistrationFooter/RegistrationFooter";

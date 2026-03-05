@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { BrandingHeader, RegistrationFooter } from "../components";
-import { appName, systemInfo } from "../data/system";
+import { BrandingHeader, RegistrationFooter } from "../../components";
+import { appName, systemInfo } from "../../data/system";
 
 function Login({ onLogin }) {
     const [formData, setFormData] = useState({

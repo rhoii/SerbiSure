@@ -1,6 +1,6 @@
-import { BrandingHeader, RegistrationForm, RegistrationFooter } from "../components";
-import { appName, systemInfo, userRoles } from "../data/system";
-import { skillCategories } from "../data/skills";
+import { BrandingHeader, RegistrationForm, RegistrationFooter } from "../../components";
+import { appName, systemInfo, userRoles } from "../../data/system";
+import { skillCategories } from "../../data/skills";
 
 function Registration({ onNavigateToLogin, onRegister }) {
   return (

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { activeRequests, topRatedWorkers, dashboardNotifications } from "../data/dashboard";
-import "../styles/Dashboard.css";
-import "../styles/ActiveRequests.css";
-import "../styles/Sidebar.css";
+import { activeRequests, topRatedWorkers, dashboardNotifications } from "../../data/dashboard";
+import "./Dashboard.css";
+import "./ActiveRequests.css";
+import "./Sidebar.css";
 
 function HomeownerDashboardPage({ user }) {
     const [activeTab, setActiveTab] = useState("pending");
