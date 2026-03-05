@@ -5,6 +5,7 @@ import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import HomeownerDashboardPage from "./pages/HomeownerDashboardPage";
+import WorkerDashboardPage from "./pages/WorkerDashboardPage";
 import ServicesPage from "./pages/FeedbackPage";
 
 import HistoryPage from "./pages/HistoryPage";
@@ -88,9 +89,13 @@ function AppContent() {
 
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={
-                        isAuthenticated ?
-                            <HomeownerDashboardPage user={user} /> :
+                        isAuthenticated ? (
+                            user.role === "worker" ?
+                                <WorkerDashboardPage user={user} /> :
+                                <HomeownerDashboardPage user={user} />
+                        ) : (
                             <Navigate to="/login" />
+                        )
                     } />
 
                     <Route path="/feedback" element={
