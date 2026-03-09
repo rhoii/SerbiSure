@@ -34,6 +34,7 @@ function Login({ onLogin }) {
                 "auth/wrong-password": "Incorrect password.",
                 "auth/too-many-requests": "Too many failed attempts. Please try again later.",
                 "auth/invalid-email": "Please enter a valid email address.",
+                "auth/role-mismatch": "This account is not registered for the selected role.",
             };
             setError(errorMessages[result.error] || "Login failed. Please try again.");
         }

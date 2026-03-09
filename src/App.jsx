@@ -22,6 +22,7 @@ function AppContent() {
     const [user, setUser] = useState({ name: "", email: "", role: "", about: "", skills: "", location: "", isWorkerOnboarded: false });
     const [notifications, setNotifications] = useState([]);
     const [authLoading, setAuthLoading] = useState(true);
+    const [isValidatingRole, setIsValidatingRole] = useState(false);
     const [settings, setSettings] = useState({
         darkMode: true,
         language: "English"
@@ -47,7 +48,8 @@ function AppContent() {
     // Firebase Auth state observer — listens for session changes over HTTPS/TLS
     useEffect(() => {
         const unsubscribe = onAuthChange(async (firebaseUser) => {
-            if (firebaseUser) {
+            // ONLY auto-authenticate if we aren't in the middle of a manual login validation
+            if (firebaseUser && !isValidatingRole) {
                 // User is signed in — Fetch their persistent profile from Firestore
                 const profile = await getUserProfile(firebaseUser.uid);
 
@@ -57,13 +59,12 @@ function AppContent() {
                     uid: firebaseUser.uid,
                     name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
                     email: firebaseUser.email,
-                    // Use Firestore profile as source of truth, fallback to in-memory/homeowner
                     role: profile?.role || prev.role || "homeowner",
                     skills: profile?.skills || prev.skills || "",
                     isWorkerOnboarded: profile?.isWorkerOnboarded || prev.isWorkerOnboarded || false,
                     workerProfile: profile?.workerProfile || prev.workerProfile || null
                 }));
-            } else {
+            } else if (!firebaseUser) {
                 // User is signed out
                 setIsAuthenticated(false);
                 setUser({ name: "", email: "", role: "", about: "", skills: "", location: "", isWorkerOnboarded: false });
@@ -71,7 +72,7 @@ function AppContent() {
             setAuthLoading(false);
         });
         return () => unsubscribe();
-    }, []);
+    }, [isValidatingRole]); // Re-subscribe if validation state changes
 
     const addNotification = (message) => {
         setNotifications((prev) => [...prev, { id: Date.now(), message }]);
@@ -79,33 +80,50 @@ function AppContent() {
 
     // Firebase Auth: Email/Password sign-in (encrypted via HTTPS/TLS)
     const handleLogin = async (email, password, role) => {
+        setIsValidatingRole(true); // LOCK: Prevent onAuthChange from auto-redirecting
         try {
             const userCredential = await loginUser(email, password);
-            const isWorker = role === "Service Worker";
+            const isWorkerSelection = role === "Service Worker";
 
             // Check if user already has a role in Firestore
             const profile = await getUserProfile(userCredential.user.uid);
-            const finalRole = profile?.role || (isWorker ? "worker" : "homeowner");
+
+            if (profile) {
+                const actualRole = profile.role; // "worker" or "homeowner"
+                const expectedRole = isWorkerSelection ? "worker" : "homeowner";
+
+                // VALIDATION: Block if the role doesn't match the registration
+                if (actualRole !== expectedRole) {
+                    await logoutUser(); // Immediately sign out the invalid session
+                    setIsValidatingRole(false);
+                    return { success: false, error: "auth/role-mismatch" };
+                }
+            }
+
+            const finalRole = profile?.role || (isWorkerSelection ? "worker" : "homeowner");
 
             setUser(prev => ({
                 ...prev,
                 uid: userCredential.user.uid,
                 role: finalRole,
-                isWorkerOnboarded: profile?.isWorkerOnboarded || isWorker
+                isWorkerOnboarded: profile?.isWorkerOnboarded || isWorkerSelection
             }));
 
-            // Persist the login role if it's new
+            // Persist the login role if it's new (fallback for legacy accounts)
             if (!profile) {
                 await setUserProfile(userCredential.user.uid, {
                     role: finalRole,
-                    isWorkerOnboarded: false // Force onboarding for new logins
+                    isWorkerOnboarded: false
                 });
             }
 
+            setIsAuthenticated(true); // Finalize authentication state
+            setIsValidatingRole(false);
             addNotification(`Welcome back!`);
             navigate("/dashboard");
             return { success: true };
         } catch (error) {
+            setIsValidatingRole(false);
             return { success: false, error: error.code };
         }
     };
